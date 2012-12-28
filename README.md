@@ -1,4 +1,4 @@
-EC2Backup
+EC2Utilities
 =========
 
-Backup Utility for EC2 EBS Volumes
+Utilities for EC2
