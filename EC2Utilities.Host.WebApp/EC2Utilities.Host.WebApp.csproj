@@ -72,6 +72,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountMembershipService.cs" />
+    <Compile Include="Models\ServerListModel.cs" />
     <Compile Include="Models\ValidatePasswordLengthAttribute.cs" />
     <Compile Include="Models\AccountValidation.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />

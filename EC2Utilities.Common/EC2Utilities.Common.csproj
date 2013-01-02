@@ -63,6 +63,8 @@
     <Compile Include="Config\BackupInstancesConfigSection.cs" />
     <Compile Include="Config\InstanceElement.cs" />
     <Compile Include="Config\InstancesCollection.cs" />
+    <Compile Include="Contract\Ec2UtilityInstance.cs" />
+    <Compile Include="Contract\Ec2UtilityInstanceStatus.cs" />
     <Compile Include="Engine\IScheduleEngine.cs" />
     <Compile Include="Engine\ScheduleEngine.cs" />
     <Compile Include="Factory\ContainerBootstrapper.cs" />
@@ -71,6 +73,8 @@
     <Compile Include="Engine\IBackupEngine.cs" />
     <Compile Include="Manager\BackupManager.cs" />
     <Compile Include="Manager\IBackupManager.cs" />
+    <Compile Include="Manager\IInstanceManager.cs" />
+    <Compile Include="Manager\InstanceManager.cs" />
     <Compile Include="Manager\IScheduleManager.cs" />
     <Compile Include="Manager\ScheduleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
