@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using EC2Utilities.Common.Contract;
+using EC2Utilities.Common.Manager;
 using EC2Utilities.Host.WebApp.Models;
+using StructureMap;
 
 namespace EC2Utilities.Host.WebApp.Controllers
 {
@@ -25,29 +24,11 @@ namespace EC2Utilities.Host.WebApp.Controllers
 
         public ActionResult ServerStartUp()
         {
-            var serverList = new List<ServerListModel>();
+            var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
+            var instances = instanceManager.GetInstances();
 
-            serverList.Add(new ServerListModel
-            {
-                ServerId = "1",
-                ServerName = "1",
-                ServerStatus = "Stopped"
-            });
-
-            serverList.Add(new ServerListModel
-            {
-                ServerId = "2",
-                ServerName = "2",
-                ServerStatus = "Stopped"
-            });
-
-            serverList.Add(new ServerListModel
-            {
-                ServerId = "3",
-                ServerName = "3",
-                ServerStatus = "Running"
-            });
-
+            IEnumerable<ServerListModel> serverList = instances.Select(x => new ServerListModel { ServerId = x.InstanceId, ServerName = x.InstanceName, ServerStatus = x.Status.ToString() });
+                
             return View(serverList);
         }
     }
