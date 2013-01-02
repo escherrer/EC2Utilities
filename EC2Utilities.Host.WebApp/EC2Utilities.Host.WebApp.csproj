@@ -71,11 +71,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AccountMembershipService.cs" />
+    <Compile Include="Models\ValidatePasswordLengthAttribute.cs" />
+    <Compile Include="Models\AccountValidation.cs" />
+    <Compile Include="Models\ChangePasswordModel.cs" />
+    <Compile Include="Models\FormsAuthenticationService.cs" />
+    <Compile Include="Models\IFormsAuthenticationService.cs" />
+    <Compile Include="Models\IMembershipService.cs" />
+    <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\PropertiesMustMatchAttribute.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Views\Home\ServerStartUp.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

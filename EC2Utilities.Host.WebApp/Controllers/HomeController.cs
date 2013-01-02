@@ -11,12 +11,17 @@ namespace EC2Utilities.Host.WebApp.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["Message"] = "Welcome to ASP.NET MVC!";
+            ViewData["Message"] = "EC2 Utilities";
 
             return View();
         }
 
         public ActionResult About()
+        {
+            return View();
+        }
+
+        public ActionResult ServerStartUp()
         {
             return View();
         }
