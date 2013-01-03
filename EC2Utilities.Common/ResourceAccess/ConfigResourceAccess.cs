@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using EC2Utilities.Common.Config;
+using EC2Utilities.Common.DebugHelper;
 
 namespace EC2Utilities.Common.ResourceAccess
 {
@@ -19,9 +20,15 @@ namespace EC2Utilities.Common.ResourceAccess
         public Ec2Key GetEc2Key()
         {
             var result = new Ec2Key();
+            
+            result.AwsAccessKey = ConfigurationManager.AppSettings["AWSAccessKey"];
+            result.AwsSecretKey = ConfigurationManager.AppSettings["AWSSecretKey"];
 
-            result.AccessKeyId = ConfigurationManager.AppSettings["AWSAccessKey"];
-            result.SecretAccessKey = ConfigurationManager.AppSettings["AWSSecretKey"];
+#if DEBUG
+            var debugCreds = CredentialHelper.GetDebugCredentials();
+            result.AwsAccessKey = debugCreds.AccessKeyId;
+            result.AwsSecretKey = debugCreds.SecretKey;
+#endif
 
             return result;
         }

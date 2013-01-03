@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -38,6 +39,7 @@ namespace EC2Utilities.Host.WebApp
             try
             {
                 var logger = ObjectFactory.GetInstance<Logger>();
+
                 Exception exception = Server.GetLastError() ?? new Exception("Unable to get exception.");
 
                 logger.FatalException("An unhandled exception occurred.", exception);
@@ -46,14 +48,12 @@ namespace EC2Utilities.Host.WebApp
             { }
             
             HttpContext ctx = HttpContext.Current;
-            //var error = new KeyValuePair<string, object>("ErrorMessage", ctx.Server.GetLastError().ToString());
             ctx.Response.Clear();
             RequestContext rc = ((MvcHandler)ctx.CurrentHandler).RequestContext;
             string controllerName = rc.RouteData.GetRequiredString("controller");
             IControllerFactory factory = ControllerBuilder.Current.GetControllerFactory();
             IController controller = factory.CreateController(rc, controllerName);
             var cc = new ControllerContext(rc, (ControllerBase)controller);
-
 
             var viewResult = new ViewResult { ViewName = "Error" };
             viewResult.ExecuteResult(cc);

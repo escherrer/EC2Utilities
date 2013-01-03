@@ -20,6 +20,7 @@ namespace EC2Utilities.Common.Factory
                 x.For<IScheduleManager>().Use<ScheduleManager>();
                 x.For<IBackupManager>().Use<BackupManager>();
                 x.For<Logger>().Use(y => LogManager.GetLogger(""));
+                x.For<IInstanceManager>().Use<InstanceManager>();
             });
         }
     }

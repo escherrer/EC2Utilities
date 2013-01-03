@@ -89,7 +89,7 @@ namespace EC2Utilities.Common.ResourceAccess
         private AmazonEC2 CreateAmazonEc2Client(Ec2Key ec2Key)
         {
             var er2Config = new AmazonEC2Config();
-            AmazonEC2 ec2 = AWSClientFactory.CreateAmazonEC2Client(ec2Key.AccessKeyId, ec2Key.SecretAccessKey, er2Config);
+            AmazonEC2 ec2 = AWSClientFactory.CreateAmazonEC2Client(ec2Key.AwsAccessKey, ec2Key.AwsSecretKey, er2Config);
 
             return ec2;
         }

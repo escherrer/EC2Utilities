@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using EC2Utilities.Common.DebugHelper;
 using EC2Utilities.Host.WebApp.Models;
 
 namespace EC2Utilities.Host.WebApp.Controllers
@@ -41,6 +42,12 @@ namespace EC2Utilities.Host.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+#if DEBUG
+                var debugCreds = CredentialHelper.GetDebugCredentials();
+                model.UserName = debugCreds.Login;
+                model.Password = debugCreds.Password;
+#endif
+
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
                     FormsService.SignIn(model.UserName, model.RememberMe);
@@ -48,15 +55,9 @@ namespace EC2Utilities.Host.WebApp.Controllers
                     {
                         return Redirect(returnUrl);
                     }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                }
+                ModelState.AddModelError("", "The user name or password provided is incorrect.");
             }
 
             // If we got this far, something failed, redisplay form
@@ -97,10 +98,8 @@ namespace EC2Utilities.Host.WebApp.Controllers
                     FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
-                }
+                
+                ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
             }
 
             // If we got this far, something failed, redisplay form
@@ -129,10 +128,8 @@ namespace EC2Utilities.Host.WebApp.Controllers
                 {
                     return RedirectToAction("ChangePasswordSuccess");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                }
+                
+                ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
             }
 
             // If we got this far, something failed, redisplay form
