@@ -5,6 +5,7 @@
         Running,
         Stopped,
         Started,
-        Starting
+        Pending,
+        Stopping
     }
 }

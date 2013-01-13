@@ -7,5 +7,7 @@
         public string InstanceId { get; set; }
 
         public Ec2UtilityInstanceStatus Status { get; set; }
+
+        public string DefaultIp { get; set; }
     }
 }

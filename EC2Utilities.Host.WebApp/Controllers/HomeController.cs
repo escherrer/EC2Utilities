@@ -31,5 +31,14 @@ namespace EC2Utilities.Host.WebApp.Controllers
                 
             return View(serverList);
         }
+
+        public ActionResult StartServer(string instanceId)
+        {
+            var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
+
+            instanceManager.StartUpInstance(instanceId);
+
+            return View("ServerStartUp");
+        }
     }
 }

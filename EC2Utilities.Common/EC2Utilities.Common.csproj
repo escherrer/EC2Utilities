@@ -94,6 +94,7 @@
     <Compile Include="ResourceAccess\IConfigResourceAccess.cs" />
     <Compile Include="ResourceAccess\IEc2ResourceAccess.cs" />
     <Compile Include="DebugHelper\DebugCredentials.cs" />
+    <Compile Include="Utility\TagFacade.cs" />
     <Compile Include="Utility\WinNtMembershipProvider.cs" />
   </ItemGroup>
   <ItemGroup>

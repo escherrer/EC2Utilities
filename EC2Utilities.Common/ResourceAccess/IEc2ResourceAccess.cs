@@ -14,5 +14,9 @@ namespace EC2Utilities.Common.ResourceAccess
         List<Snapshot> GetSnapshots(Ec2Key ec2Key);
 
         void DeleteSnapshot(Ec2Key ec2Key, string snapshotId);
+
+        void StartUpInstance(Ec2Key ec2Key, string instanceId);
+
+        void AssociateIpToInstance(Ec2Key ec2Key, string instanceId, string ip);
     }
 }

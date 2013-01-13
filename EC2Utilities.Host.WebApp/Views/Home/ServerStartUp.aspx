@@ -10,15 +10,17 @@
 
     <table>
         <tr>
-            <th></th>
             <th>
-                ServerName
+                Server Name
             </th>
             <th>
-                ServerId
+                Server Id
             </th>
             <th>
-                ServerStatus
+                Server Status
+            </th>
+            <th>
+                Start Server
             </th>
         </tr>
 
@@ -39,7 +41,7 @@
                     if (item.ServerStatus != "Running")
                     {
                         %>
-                        <%: Html.ActionLink("Start Up", "ServerStartUp", new {/* id=item.PrimaryKey */}) %>
+                        <%: Html.ActionLink("Start Up", "StartServer", new { @instanceId = item.ServerId })%>
                         <%
                     }
                 %>

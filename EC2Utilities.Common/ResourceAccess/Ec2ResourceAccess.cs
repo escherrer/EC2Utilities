@@ -86,6 +86,34 @@ namespace EC2Utilities.Common.ResourceAccess
             ec2.DeleteSnapshot(request);
         }
 
+        public void StartUpInstance(Ec2Key ec2Key, string instanceId)
+        {
+            AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
+
+            var request = new StartInstancesRequest
+                              {
+                                  InstanceId = new List<string>
+                                                   {
+                                                       instanceId
+                                                   }
+                              };
+
+            ec2.StartInstances(request);
+        }
+
+        public void AssociateIpToInstance(Ec2Key ec2Key, string instanceId, string ip)
+        {
+            AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
+
+            var request = new AssociateAddressRequest
+            {
+                InstanceId = instanceId,
+                PublicIp = ip
+            };
+
+            ec2.AssociateAddress(request);
+        }
+
         private AmazonEC2 CreateAmazonEc2Client(Ec2Key ec2Key)
         {
             var er2Config = new AmazonEC2Config();
