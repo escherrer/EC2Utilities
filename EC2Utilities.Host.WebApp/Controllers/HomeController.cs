@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using EC2Utilities.Common.Contract;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Host.WebApp.Models;
 using StructureMap;
@@ -27,7 +28,7 @@ namespace EC2Utilities.Host.WebApp.Controllers
             var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
             var instances = instanceManager.GetInstances();
 
-            IEnumerable<ServerListModel> serverList = instances.Select(x => new ServerListModel { ServerId = x.InstanceId, ServerName = x.InstanceName, ServerStatus = x.Status.ToString() });
+            IEnumerable<ServerListModel> serverList = instances.Select(x => new ServerListModel(x));
                 
             return View(serverList);
         }
@@ -36,9 +37,27 @@ namespace EC2Utilities.Host.WebApp.Controllers
         {
             var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
 
-            instanceManager.StartUpInstance(instanceId);
+            Ec2UtilityInstance ec2UtilityInstance = instanceManager.GetInstance(instanceId);
 
-            return View("ServerStartUp");
+            var startServerModel = new StartServerModel(ec2UtilityInstance);
+
+            return View(startServerModel);
+        }
+
+        [HttpPost]
+        public ActionResult StartServer(StartServerModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
+
+                instanceManager.StartUpInstance(model.ServerId);
+
+                return RedirectToAction("ServerStartUp");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return StartServer(model.ServerId);
         }
     }
 }

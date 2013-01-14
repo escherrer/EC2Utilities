@@ -5,7 +5,6 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
     <h2>ServerStartUp</h2>
 
     <table>
@@ -38,10 +37,10 @@
             </td>
             <td>
                 <%
-                    if (item.ServerStatus != "Running")
+                    if (item.ServerStatus == "Stopped")
                     {
                         %>
-                        <%: Html.ActionLink("Start Up", "StartServer", new { @instanceId = item.ServerId })%>
+                        <%: Html.ActionLink("Start Up", "StartServer", new { instanceId = item.ServerId })%>
                         <%
                     }
                 %>

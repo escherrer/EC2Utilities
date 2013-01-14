@@ -7,6 +7,8 @@ namespace EC2Utilities.Common.Manager
     {
         List<Ec2UtilityInstance> GetInstances();
 
+        Ec2UtilityInstance GetInstance(string instanceid);
+
         void StartUpInstance(string instanceId);
     }
 }

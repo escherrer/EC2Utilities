@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Models\AccountMembershipService.cs" />
     <Compile Include="Models\ServerListModel.cs" />
+    <Compile Include="Models\StartServerModel.cs" />
     <Compile Include="Models\ValidatePasswordLengthAttribute.cs" />
     <Compile Include="Models\AccountValidation.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
@@ -94,6 +95,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Views\Home\ServerStartUp.aspx" />
+    <Content Include="Views\Home\StartServer.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

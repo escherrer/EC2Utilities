@@ -50,6 +50,11 @@ namespace EC2Utilities.Common.Manager
             return returnInstances;
         }
 
+        public Ec2UtilityInstance GetInstance(string instanceid)
+        {
+            return GetInstances().SingleOrDefault(x => x.InstanceId == instanceid);
+        }
+
         public void StartUpInstance(string instanceId)
         {
             _logger.Trace("StartUp Instance Start.");
@@ -60,10 +65,10 @@ namespace EC2Utilities.Common.Manager
 
             _ec2ResourceAccess.StartUpInstance(ec2Key, instanceId);
 
-            if (!string.IsNullOrWhiteSpace(instance.DefaultIp))
-            {
-                _ec2ResourceAccess.AssociateIpToInstance(ec2Key, instanceId, instance.DefaultIp);
-            }
+            //if (!string.IsNullOrWhiteSpace(instance.DefaultIp))
+            //{
+            //    _ec2ResourceAccess.AssociateIpToInstance(ec2Key, instanceId, instance.DefaultIp);
+            //}
 
             _logger.Trace("StartUp Instance End.");
         }
