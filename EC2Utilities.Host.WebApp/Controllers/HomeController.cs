@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using EC2Utilities.Common.Contract;
+using EC2Utilities.Common.Contract.Messages;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Host.WebApp.Models;
 using StructureMap;
@@ -49,9 +50,13 @@ namespace EC2Utilities.Host.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
+                var command = new StartServerCommand();
 
-                instanceManager.StartUpInstance(model.ServerId);
+                Ec2UtilitiesWebApp.Bus.Send(command);
+
+                //var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
+
+                //instanceManager.StartUpInstance(model.ServerId);
 
                 return RedirectToAction("ServerStartUp");
             }
