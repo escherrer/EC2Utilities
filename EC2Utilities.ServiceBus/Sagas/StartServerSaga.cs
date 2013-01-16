@@ -24,6 +24,7 @@ namespace EC2Utilities.ServiceBus.Sagas
         public void Handle(StartServerCommand message)
         {
             Data.InstanceId = message.InstanceId;
+            Data.NotificationEmailAddress = message.NotificationEmailAddress;
         }
 
         public void Handle(CheckServerStatusCommand message)
@@ -57,7 +58,7 @@ namespace EC2Utilities.ServiceBus.Sagas
                     }
                 case ServerStartUpStatus.IpAssigned:
                     {
-                        _instanceManager.SendServerAvailableNotification(Data.InstanceId);
+                        _instanceManager.SendServerAvailableNotification(Data.InstanceId, Data.NotificationEmailAddress);
                         
                         Data.ServerStartUpStatus = ServerStartUpStatus.Complete;
                         
@@ -70,6 +71,14 @@ namespace EC2Utilities.ServiceBus.Sagas
                         break;
                     }
             }
+
+            var reply = new ServerStatusMessage
+                            {
+                                InstanceId = Data.InstanceId,
+                                StartUpStatus = Data.ServerStartUpStatus
+                            };
+
+            ReplyToOriginator(reply);
         }
     }
 }

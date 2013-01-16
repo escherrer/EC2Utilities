@@ -46,6 +46,7 @@ namespace EC2Utilities.Host.WebApp
                 .XmlSerializer()
                 .MsmqTransport()
                 .UnicastBus()
+                .LoadMessageHandlers()
                 .CreateBus()
                 .Start(() => Configure.Instance.ForInstallationOn<NServiceBus.Installation.Environments.Windows>().Install());
         }

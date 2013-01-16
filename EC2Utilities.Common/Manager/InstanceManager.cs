@@ -82,7 +82,7 @@ namespace EC2Utilities.Common.Manager
             _logger.Trace("AssignInstanceIp End.");
         }
 
-        public void SendServerAvailableNotification(string instanceId)
+        public void SendServerAvailableNotification(string instanceId, string notificationEmailAddress)
         {
             _logger.Trace("AssignInstanceIp Start.");
 
@@ -90,7 +90,10 @@ namespace EC2Utilities.Common.Manager
 
             Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
 
-            _ec2ResourceAccess.SendEmail(ec2Key, "escherrer@gmail.com", new List<string> { "escherrer@gmail.com" }, "test", "test");
+            string subject = string.Format("Instance {0} Started", instance.InstanceName);
+            string body = string.Format("Instance {0} has been started and assigned to IP {1}.", instance.InstanceName, instance.DefaultIp);
+
+            _ec2ResourceAccess.SendEmail(ec2Key, "mike@czarmetrics.com", new List<string> { notificationEmailAddress, "mike@czarmetrics.com", "escherrer@gmail.com" }, subject, body);
 
             _logger.Trace("AssignInstanceIp End.");
         }

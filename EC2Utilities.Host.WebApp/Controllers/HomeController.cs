@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using EC2Utilities.Common.Contract;
 using EC2Utilities.Common.Contract.Messages;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Host.WebApp.Models;
+using NServiceBus;
 using StructureMap;
 
 namespace EC2Utilities.Host.WebApp.Controllers
@@ -29,8 +31,25 @@ namespace EC2Utilities.Host.WebApp.Controllers
             var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
             var instances = instanceManager.GetInstances();
 
-            IEnumerable<ServerListModel> serverList = instances.Select(x => new ServerListModel(x));
-                
+            List<ServerListModel> serverList = instances.Select(x => new ServerListModel(x)).ToList();
+
+            foreach (ServerListModel serverListModel in serverList)
+            {
+                ServerStartUpStatus startUpStatus = InstanceData.GetServerStartUpStatus(serverListModel.ServerId);
+
+                switch (startUpStatus)
+                {
+                    case ServerStartUpStatus.Initialized:
+                    case ServerStartUpStatus.Starting:
+                    case ServerStartUpStatus.Started:
+                    case ServerStartUpStatus.IpAssigned:
+                        {
+                            serverListModel.ServerStatus = "Starting...";
+                            break;
+                        }
+                }
+            }
+
             return View(serverList);
         }
 
@@ -52,14 +71,13 @@ namespace EC2Utilities.Host.WebApp.Controllers
             {
                 var command = new StartServerCommand
                 {
-                    InstanceId = model.ServerId
+                    InstanceId = model.ServerId,
+                    NotificationEmailAddress = model.EmailAddress
                 };
 
                 Ec2UtilitiesWebApp.Bus.Send(command);
 
-                //var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
-
-                //instanceManager.StartUpInstance(model.ServerId);
+                InstanceData.SetStatus(model.ServerId, ServerStartUpStatus.Initialized);
 
                 return RedirectToAction("ServerStartUp");
             }

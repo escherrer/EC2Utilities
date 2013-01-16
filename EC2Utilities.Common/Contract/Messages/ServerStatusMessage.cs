@@ -2,10 +2,10 @@
 
 namespace EC2Utilities.Common.Contract.Messages
 {
-    public class StartServerCommand : ICommand
+    public class ServerStatusMessage : IMessage
     {
         public string InstanceId { get; set; }
 
-        public string NotificationEmailAddress { get; set; }
+        public ServerStartUpStatus StartUpStatus { get; set; }
     }
 }

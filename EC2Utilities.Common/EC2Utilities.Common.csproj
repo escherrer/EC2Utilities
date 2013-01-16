@@ -77,7 +77,12 @@
     <Compile Include="Config\InstancesCollection.cs" />
     <Compile Include="Contract\Ec2UtilityInstance.cs" />
     <Compile Include="Contract\Ec2UtilityInstanceStatus.cs" />
+    <Compile Include="Contract\Messages\AssignServerIpCommand.cs" />
+    <Compile Include="Contract\Messages\CheckServerStatusCommand.cs" />
+    <Compile Include="Contract\Messages\ServerStartUpStatus.cs" />
+    <Compile Include="Contract\Messages\ServerStatusMessage.cs" />
     <Compile Include="Contract\Messages\StartServerCommand.cs" />
+    <Compile Include="Contract\Messages\StartServerSagaData.cs" />
     <Compile Include="DebugHelper\DebugCredentialsDialog.cs">
       <SubType>Form</SubType>
     </Compile>

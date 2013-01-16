@@ -10,5 +10,11 @@ namespace EC2Utilities.ServiceBus
             Configure.Instance.InMemorySagaPersister();
         }
     }
-
+    public class IntegrationSubscriptionPersistenceBehavior : IHandleProfile<Integration>
+    {
+        public void ProfileActivated()
+        {
+            Configure.Instance.InMemorySubscriptionStorage();
+        }
+    }
 }
