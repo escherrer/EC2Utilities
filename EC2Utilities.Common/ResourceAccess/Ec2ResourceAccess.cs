@@ -2,6 +2,8 @@
 using Amazon;
 using Amazon.EC2;
 using Amazon.EC2.Model;
+using Amazon.SimpleEmail;
+using Amazon.SimpleEmail.Model;
 
 namespace EC2Utilities.Common.ResourceAccess
 {
@@ -114,12 +116,40 @@ namespace EC2Utilities.Common.ResourceAccess
             ec2.AssociateAddress(request);
         }
 
+        public void SendEmail(Ec2Key ec2Key, string fromAddress, List<string> toAddresses, string subject, string body)
+        {
+            AmazonSimpleEmailService ses = CreateAmazonSes(ec2Key);
+
+            var request = new SendEmailRequest
+                              {
+                                  Destination = new Destination(toAddresses),
+                                  ReplyToAddresses = new List<string> { fromAddress },
+                                  Message = new Message
+                                                {
+                                                    Subject = new Content(subject),
+                                                    Body = new Body(new Content(body))
+                                                },
+                                ReturnPath = fromAddress,
+                                Source = fromAddress
+                              };
+
+            ses.SendEmail(request);
+        }
+
         private AmazonEC2 CreateAmazonEc2Client(Ec2Key ec2Key)
         {
             var er2Config = new AmazonEC2Config();
             AmazonEC2 ec2 = AWSClientFactory.CreateAmazonEC2Client(ec2Key.AwsAccessKey, ec2Key.AwsSecretKey, er2Config);
 
             return ec2;
+        }
+
+        private AmazonSimpleEmailService CreateAmazonSes(Ec2Key ec2Key)
+        {
+            var sesConfig = new AmazonSimpleEmailServiceConfig();
+            AmazonSimpleEmailService ses = AWSClientFactory.CreateAmazonSimpleEmailServiceClient(ec2Key.AwsAccessKey, ec2Key.AwsSecretKey, sesConfig);
+
+            return ses;
         }
     }
 }

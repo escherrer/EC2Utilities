@@ -10,5 +10,9 @@ namespace EC2Utilities.Common.Manager
         Ec2UtilityInstance GetInstance(string instanceid);
 
         void StartUpInstance(string instanceId);
+
+        void AssignInstanceIp(string instanceId);
+
+        void SendServerAvailableNotification(string instanceId);
     }
 }

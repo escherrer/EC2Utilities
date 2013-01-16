@@ -1,3 +1,5 @@
+using EC2Utilities.Common.Factory;
+
 namespace EC2Utilities.ServiceBus 
 {
     using NServiceBus;
@@ -8,5 +10,20 @@ namespace EC2Utilities.ServiceBus
 	*/
 	public class EndpointConfig : IConfigureThisEndpoint, AsA_Server
     {
+	    public EndpointConfig()
+	    {
+            ContainerBootstrapper.BootstrapStructureMap();
+
+            //Configure.With()
+            //    .DefaultBuilder()
+            //    .Log4Net()
+            //    .XmlSerializer()
+            //    .MsmqTransport()
+            //    .UnicastBus()
+            //    .CreateBus()
+            //    .Start(() => Configure.Instance.ForInstallationOn<NServiceBus.Installation.Environments.Windows>().Install());
+
+	        //Configure.With().DefaultBuilder().InMemorySagaPersister();
+	    }
     }
 }

@@ -50,7 +50,10 @@ namespace EC2Utilities.Host.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var command = new StartServerCommand();
+                var command = new StartServerCommand
+                {
+                    InstanceId = model.ServerId
+                };
 
                 Ec2UtilitiesWebApp.Bus.Send(command);
 

@@ -57,20 +57,42 @@ namespace EC2Utilities.Common.Manager
 
         public void StartUpInstance(string instanceId)
         {
-            _logger.Trace("StartUp Instance Start.");
+            _logger.Trace("StartUpInstance Start.");
+
+            Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
+
+            _ec2ResourceAccess.StartUpInstance(ec2Key, instanceId);
+
+            _logger.Trace("StartUpInstance End.");
+        }
+
+        public void AssignInstanceIp(string instanceId)
+        {
+            _logger.Trace("AssignInstanceIp Start.");
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
 
             Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
 
-            _ec2ResourceAccess.StartUpInstance(ec2Key, instanceId);
+            if (!string.IsNullOrWhiteSpace(instance.DefaultIp))
+            {
+                _ec2ResourceAccess.AssociateIpToInstance(ec2Key, instanceId, instance.DefaultIp);
+            }
 
-            //if (!string.IsNullOrWhiteSpace(instance.DefaultIp))
-            //{
-            //    _ec2ResourceAccess.AssociateIpToInstance(ec2Key, instanceId, instance.DefaultIp);
-            //}
+            _logger.Trace("AssignInstanceIp End.");
+        }
 
-            _logger.Trace("StartUp Instance End.");
+        public void SendServerAvailableNotification(string instanceId)
+        {
+            _logger.Trace("AssignInstanceIp Start.");
+
+            Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
+
+            Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
+
+            _ec2ResourceAccess.SendEmail(ec2Key, "escherrer@gmail.com", new List<string> { "escherrer@gmail.com" }, "test", "test");
+
+            _logger.Trace("AssignInstanceIp End.");
         }
     }
 }

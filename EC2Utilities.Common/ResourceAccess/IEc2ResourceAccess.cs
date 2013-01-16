@@ -18,5 +18,7 @@ namespace EC2Utilities.Common.ResourceAccess
         void StartUpInstance(Ec2Key ec2Key, string instanceId);
 
         void AssociateIpToInstance(Ec2Key ec2Key, string instanceId, string ip);
+
+        void SendEmail(Ec2Key ec2Key, string fromAddress, List<string> toAddresses, string subject, string body);
     }
 }
