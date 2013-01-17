@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Security;
 using EC2Utilities.Common.Factory;
 using NLog;
 using NServiceBus;
@@ -36,6 +37,14 @@ namespace EC2Utilities.Host.WebApp
             RegisterRoutes(RouteTable.Routes);
 
             StartMessageBus();
+        }
+
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+            if (System.Diagnostics.Debugger.IsAttached && User == null)
+            {
+                FormsAuthentication.SetAuthCookie("debugger", false);
+            }
         }
 
         private void StartMessageBus()

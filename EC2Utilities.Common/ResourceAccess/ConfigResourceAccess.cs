@@ -8,11 +8,11 @@ namespace EC2Utilities.Common.ResourceAccess
 {
     public class ConfigResourceAccess : IConfigResourceAccess
     {
-        public List<string> GetInstances()
+        public List<string> GetNotificationEmailaddresses()
         {
-            var section = (BackupInstancesConfigSection)ConfigurationManager.GetSection("BackupInstances");
+            var section = (ServerStartEmailConfigSection)ConfigurationManager.GetSection("ServerStartEmail");
 
-            IEnumerable<string> result = section.InstanceItems.Cast<InstanceElement>().Select(x => x.Instance);
+            IEnumerable<string> result = section.InstanceItems.Cast<EmailAddressElement>().Select(x => x.EmailAddress);
 
             return result.ToList();
         }
@@ -29,6 +29,13 @@ namespace EC2Utilities.Common.ResourceAccess
             result.AwsAccessKey = debugCreds.AccessKeyId;
             result.AwsSecretKey = debugCreds.SecretKey;
 #endif
+
+            return result;
+        }
+
+        public string GetEmailAlertFromEmailAddress()
+        {
+            string result = ConfigurationManager.AppSettings["EmailAlertFromEmailAddress"];
 
             return result;
         }

@@ -16,16 +16,15 @@ namespace EC2Utilities.Common.Utility
         private String _userDomain;
         private int _logonType;
 
-        private Boolean _boolEnablePasswordReset;
-        private Boolean _boolEnablePasswordRetrieval;
-        private int _intMaxInvalidPasswordAttempts;
-        private int _intMinRequiredAlphanumericCharacters;
-        private int _intMinRequiredPasswordLength;
-        private MembershipPasswordFormat _oPasswordFormat;
-        private string _strPasswordStrengthRegularExpression;
-        private Boolean _boolRequiresQuestionAndAnswer;
-        private Boolean _boolRequiresUniqueEMail;
-
+        private readonly Boolean _boolEnablePasswordReset;
+        private readonly Boolean _boolEnablePasswordRetrieval;
+        private readonly int _intMaxInvalidPasswordAttempts;
+        private readonly int _intMinRequiredAlphanumericCharacters;
+        private readonly int _intMinRequiredPasswordLength;
+        private readonly MembershipPasswordFormat _oPasswordFormat;
+        private readonly string _strPasswordStrengthRegularExpression;
+        private readonly Boolean _boolRequiresQuestionAndAnswer;
+        private readonly Boolean _boolRequiresUniqueEMail;
             
         public WinNtMembershipProvider()
         {

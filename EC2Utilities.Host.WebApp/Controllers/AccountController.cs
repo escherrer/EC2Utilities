@@ -42,12 +42,6 @@ namespace EC2Utilities.Host.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-#if DEBUG
-                var debugCreds = CredentialHelper.GetDebugCredentials();
-                model.UserName = debugCreds.Login;
-                model.Password = debugCreds.Password;
-#endif
-
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
                     FormsService.SignIn(model.UserName, model.RememberMe);

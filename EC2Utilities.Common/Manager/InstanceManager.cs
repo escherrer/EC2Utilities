@@ -87,13 +87,15 @@ namespace EC2Utilities.Common.Manager
             _logger.Trace("AssignInstanceIp Start.");
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
-
             Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
 
-            string subject = string.Format("Instance {0} Started", instance.InstanceName);
-            string body = string.Format("Instance {0} has been started and assigned to IP {1}.", instance.InstanceName, instance.DefaultIp);
+            string subject = string.Format("Instance '{0}' Started", instance.InstanceName);
+            string body = string.Format("Instance '{0}' has been started and assigned to IP {1}.", instance.InstanceName, instance.DefaultIp);
+            string from = _configResourceAccess.GetEmailAlertFromEmailAddress();
+            List<string> notificationEmailAddresses = _configResourceAccess.GetNotificationEmailaddresses();
+            notificationEmailAddresses.Add(notificationEmailAddress);
 
-            _ec2ResourceAccess.SendEmail(ec2Key, "mike@czarmetrics.com", new List<string> { notificationEmailAddress, "mike@czarmetrics.com", "escherrer@gmail.com" }, subject, body);
+            _ec2ResourceAccess.SendEmail(ec2Key, from, notificationEmailAddresses, subject, body);
 
             _logger.Trace("AssignInstanceIp End.");
         }

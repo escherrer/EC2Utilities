@@ -72,9 +72,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\BackupInstancesConfigSection.cs" />
-    <Compile Include="Config\InstanceElement.cs" />
-    <Compile Include="Config\InstancesCollection.cs" />
+    <Compile Include="Config\ServerStartEmailConfigSection.cs" />
+    <Compile Include="Config\EmailAddressElement.cs" />
+    <Compile Include="Config\EmailAddressCollection.cs" />
     <Compile Include="Contract\Ec2UtilityInstance.cs" />
     <Compile Include="Contract\Ec2UtilityInstanceStatus.cs" />
     <Compile Include="Contract\Messages\AssignServerIpCommand.cs" />

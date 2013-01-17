@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Web.Script.Serialization;
 
@@ -5,11 +6,12 @@ namespace EC2Utilities.Common.DebugHelper
 {
     public static class CredentialHelper
     {
-        private const string CredFilePath = @"C:\EC2Utility.Debug";
+        private const string CredFileName = @"EC2Utility.Debug";
+        private const string CredFileDirectory = @"C:\EC2Utility\";
 
         public static DebugCredentials GetDebugCredentials()
         {
-            if (!File.Exists(CredFilePath))
+            if (!File.Exists(CredFileDirectory + CredFileName))
             {
                 return CreateCredFile();
             }
@@ -19,9 +21,16 @@ namespace EC2Utilities.Common.DebugHelper
 
         private static DebugCredentials CreateCredFile()
         {
-            DebugCredentials creds = GatherCredentials();
+            var creds = new DebugCredentials
+            {
+                AccessKeyId = "Put Access Key Here",
+                SecretKey = "Put Secret Key Here"
+            };
 
-            FileStream credFile = File.Open(CredFilePath, FileMode.CreateNew);
+            if (!Directory.Exists(CredFileDirectory))
+                Directory.CreateDirectory(CredFileDirectory);
+
+            FileStream credFile = File.Open(CredFileDirectory + CredFileName, FileMode.CreateNew);
 
             var serializer = new JavaScriptSerializer();
 
@@ -33,6 +42,11 @@ namespace EC2Utilities.Common.DebugHelper
 
             writer.Close();
             credFile.Close();
+
+            string debugMsg = string.Format(
+                    "A file has been created at {0} for purposes of storing EC2 credentials locally for debugging. Please edit this file to provide EC2 credentials to use while debugging. When not debugging these credentials are read from App.config.",
+                    CredFileDirectory + CredFileName);
+            Debug.Assert(false, debugMsg);
 
             return creds;
         }
@@ -47,15 +61,13 @@ namespace EC2Utilities.Common.DebugHelper
                        {
 
                            AccessKeyId = dcForm.AccessKey,
-                           SecretKey = dcForm.SecretKey,
-                           Login = dcForm.Login,
-                           Password = dcForm.Password,
+                           SecretKey = dcForm.SecretKey
                        };
         }
 
         private static DebugCredentials PopulateFromCredFile()
         {
-            FileStream credFile = File.Open(CredFilePath, FileMode.Open);
+            FileStream credFile = File.Open(CredFileDirectory + CredFileName, FileMode.Open);
 
             var reader = new StreamReader(credFile);
 
@@ -69,9 +81,7 @@ namespace EC2Utilities.Common.DebugHelper
             return new DebugCredentials
                        {
                            AccessKeyId = creds.AccessKeyId,
-                           SecretKey = creds.SecretKey,
-                           Login = creds.Login,
-                           Password = creds.Password
+                           SecretKey = creds.SecretKey
                        };
         }
     }
