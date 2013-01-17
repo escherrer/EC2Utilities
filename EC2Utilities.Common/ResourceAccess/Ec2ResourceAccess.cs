@@ -4,42 +4,59 @@ using Amazon.EC2;
 using Amazon.EC2.Model;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
+using NLog;
 
 namespace EC2Utilities.Common.ResourceAccess
 {
     public class Ec2ResourceAccess : IEc2ResourceAccess
     {
+        private readonly Logger _logger;
+
+        public Ec2ResourceAccess(Logger logger)
+        {
+            _logger = logger;
+        }
+
         public DescribeInstancesResult GetInstances(Ec2Key ec2Key)
         {
+            _logger.Trace("GetInstances Start.");
+
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
             var ec2Request = new DescribeInstancesRequest();
 
-            DescribeInstancesResponse result = ec2.DescribeInstances(ec2Request);
+            DescribeInstancesResponse describeInstancesResponse = ec2.DescribeInstances(ec2Request);
 
-            return result.DescribeInstancesResult;
+            DescribeInstancesResult result = describeInstancesResponse.DescribeInstancesResult;
+
+            _logger.Trace("GetInstances End.");
+
+            return result;
         }
 
         public DescribeVolumesResult GetVolumes(Ec2Key ec2Key)
         {
+            _logger.Trace("GetVolumes Start.");
+
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
             var ec2Request = new DescribeVolumesRequest();
 
-            DescribeVolumesResponse result = ec2.DescribeVolumes(ec2Request);
+            DescribeVolumesResponse describeVolumesResponse = ec2.DescribeVolumes(ec2Request);
 
-            return result.DescribeVolumesResult;
+            DescribeVolumesResult result = describeVolumesResponse.DescribeVolumesResult;
+
+            _logger.Trace("GetVolumes End.");
+
+            return result;
         }
 
         public Snapshot SnapshotVolume(Ec2Key ec2Key, string volumeId, string snapshotDescription, string backupType)
         {
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
-            var ec2Request = new CreateSnapshotRequest();
+            var ec2Request = new CreateSnapshotRequest {Description = snapshotDescription, VolumeId = volumeId};
 
-            ec2Request.Description = snapshotDescription;
-            ec2Request.VolumeId = volumeId;
-            
             CreateSnapshotResponse result = ec2.CreateSnapshot(ec2Request);
 
             var request = new CreateTagsRequest();
@@ -80,16 +97,21 @@ namespace EC2Utilities.Common.ResourceAccess
 
         public void DeleteSnapshot(Ec2Key ec2Key, string snapshotId)
         {
+            _logger.Trace("DeleteSnapshot Start.");
+
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
-            var request = new DeleteSnapshotRequest();
-            request.SnapshotId = snapshotId;
+            var request = new DeleteSnapshotRequest {SnapshotId = snapshotId};
 
             ec2.DeleteSnapshot(request);
+
+            _logger.Trace("DeleteSnapshot End.");
         }
 
         public void StartUpInstance(Ec2Key ec2Key, string instanceId)
         {
+            _logger.Trace("DeleteSnapshot Start.");
+
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
             var request = new StartInstancesRequest
@@ -101,6 +123,8 @@ namespace EC2Utilities.Common.ResourceAccess
                               };
 
             ec2.StartInstances(request);
+
+            _logger.Trace("StartUpInstance End.");
         }
 
         public void AssociateIpToInstance(Ec2Key ec2Key, string instanceId, string ip)
