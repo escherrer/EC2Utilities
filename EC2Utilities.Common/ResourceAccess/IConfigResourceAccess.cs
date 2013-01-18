@@ -2,7 +2,7 @@
 
 namespace EC2Utilities.Common.ResourceAccess
 {
-    public interface IConfigResourceAccess
+    public interface IConfigResourceAccess : IEc2UtilitiesResourceAccess
     {
         List<string> GetNotificationEmailaddresses();
 

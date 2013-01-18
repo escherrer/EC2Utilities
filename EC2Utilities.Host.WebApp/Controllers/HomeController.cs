@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using EC2Utilities.Common.Contract;
 using EC2Utilities.Common.Contract.Messages;
+using EC2Utilities.Common.Exceptions;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Host.WebApp.Models;
 using NServiceBus;
@@ -28,12 +29,25 @@ namespace EC2Utilities.Host.WebApp.Controllers
 
         public ActionResult ServerStartUp()
         {
+            var serverListContainer = new ServerListModelContainer();
             var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
-            var instances = instanceManager.GetInstances();
+            var instances = new List<Ec2UtilityInstance>();
 
-            List<ServerListModel> serverList = instances.Select(x => new ServerListModel(x)).ToList();
+            try
+            {
+                instances.AddRange(instanceManager.GetInstances());
+            }
+            catch (ResourceAccessException)
+            {
+                ModelState.AddModelError("", "An error has occurred while retrieving the list of servers. See server log file for details.");   
+            }
 
-            foreach (ServerListModel serverListModel in serverList)
+            foreach (var ec2UtilityInstance in instances)
+            {
+                serverListContainer.ServerListModels.Add(new ServerListModel(ec2UtilityInstance));
+            }
+
+            foreach (ServerListModel serverListModel in serverListContainer.ServerListModels)
             {
                 ServerStartUpStatus startUpStatus = InstanceData.GetServerStartUpStatus(serverListModel.ServerId);
 
@@ -50,14 +64,24 @@ namespace EC2Utilities.Host.WebApp.Controllers
                 }
             }
 
-            return View(serverList);
+            return View(serverListContainer);
         }
 
         public ActionResult StartServer(string instanceId)
         {
             var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
+            Ec2UtilityInstance ec2UtilityInstance;
 
-            Ec2UtilityInstance ec2UtilityInstance = instanceManager.GetInstance(instanceId);
+            try
+            {
+                ec2UtilityInstance = instanceManager.GetInstance(instanceId);
+            }
+            catch (ResourceAccessException)
+            {
+                var errMsg = string.Format("An error has occurred while retrieving the detals for instance id {0}. See server log file for details.", instanceId);
+                ModelState.AddModelError("", errMsg);
+                ec2UtilityInstance = new Ec2UtilityInstance {Status = Ec2UtilityInstanceStatus.Indeterminate};
+            }
 
             var startServerModel = new StartServerModel(ec2UtilityInstance);
 

@@ -7,7 +7,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Start Server</h2>
-    
+
     <p>
         Please enter your email address to receive notifcation when server is ready.
     </p>

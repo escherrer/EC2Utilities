@@ -3,7 +3,7 @@ using Amazon.EC2.Model;
 
 namespace EC2Utilities.Common.ResourceAccess
 {
-    public interface IEc2ResourceAccess
+    public interface IEc2ResourceAccess : IEc2UtilitiesResourceAccess
     {
         DescribeInstancesResult GetInstances(Ec2Key ec2Key);
 

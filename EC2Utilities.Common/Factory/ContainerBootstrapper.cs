@@ -1,4 +1,7 @@
-﻿using EC2Utilities.Common.Engine;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+using EC2Utilities.Common.Engine;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Common.ResourceAccess;
 using NLog;
@@ -21,6 +24,7 @@ namespace EC2Utilities.Common.Factory
                 x.For<IBackupManager>().Use<BackupManager>();
                 x.For<Logger>().Use(y => LogManager.GetLogger(""));
                 x.For<IInstanceManager>().Use<InstanceManager>();
+                x.RegisterInterceptor(new ResourceAccessTypeInterceptor());
             });
         }
     }

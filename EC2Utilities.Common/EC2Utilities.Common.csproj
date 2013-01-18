@@ -37,6 +37,9 @@
     <Reference Include="AWSSDK">
       <HintPath>..\Lib\AwsSdkForDotNet\v1.5.5.1\AWSSDK.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
@@ -92,7 +95,10 @@
     <Compile Include="DebugHelper\CredentialHelper.cs" />
     <Compile Include="Engine\IScheduleEngine.cs" />
     <Compile Include="Engine\ScheduleEngine.cs" />
+    <Compile Include="Exceptions\ResourceAccessException.cs" />
     <Compile Include="Factory\ContainerBootstrapper.cs" />
+    <Compile Include="Factory\ResourceAccessInterceptor.cs" />
+    <Compile Include="Factory\ResourceAccessTypeInterceptor.cs" />
     <Compile Include="Installer\InstallHelper.cs" />
     <Compile Include="Engine\BackupEngine.cs" />
     <Compile Include="Engine\IBackupEngine.cs" />
@@ -109,6 +115,7 @@
     <Compile Include="ResourceAccess\IConfigResourceAccess.cs" />
     <Compile Include="ResourceAccess\IEc2ResourceAccess.cs" />
     <Compile Include="DebugHelper\DebugCredentials.cs" />
+    <Compile Include="ResourceAccess\IEc2UtilitiesResourceAccess.cs" />
     <Compile Include="Utility\TagFacade.cs" />
     <Compile Include="Utility\WinNtMembershipProvider.cs" />
   </ItemGroup>

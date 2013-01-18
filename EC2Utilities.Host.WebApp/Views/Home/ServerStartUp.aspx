@@ -1,11 +1,13 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<EC2Utilities.Host.WebApp.Models.ServerListModel>>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<EC2Utilities.Host.WebApp.Models.ServerListModelContainer>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	ServerStartUp
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>ServerStartUp</h2>
+    <h2>Server Start Up</h2>
+    
+    <%: Html.ValidationSummary(true, "Server enumeration unsuccessful. Please refresh the page to try again.") %>
 
     <table>
         <tr>
@@ -23,7 +25,7 @@
             </th>
         </tr>
 
-    <% foreach (var item in Model) { %>
+    <% foreach (var item in Model.ServerListModels) { %>
     
         <tr>
             <td>

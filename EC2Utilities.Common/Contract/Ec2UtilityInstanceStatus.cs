@@ -6,6 +6,7 @@
         Stopped,
         Started,
         Pending,
-        Stopping
+        Stopping,
+        Indeterminate
     }
 }
