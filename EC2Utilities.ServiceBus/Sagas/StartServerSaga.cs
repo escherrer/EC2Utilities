@@ -1,13 +1,13 @@
-﻿using EC2Utilities.Common.Contract;
+﻿using System;
+using EC2Utilities.Common.Contract;
 using EC2Utilities.Common.Contract.Messages;
 using EC2Utilities.Common.Manager;
-using NServiceBus;
 using NServiceBus.Saga;
 using StructureMap;
 
 namespace EC2Utilities.ServiceBus.Sagas
 {
-    public class StartServerSaga : Saga<StartServerSagaData>, IAmStartedByMessages<StartServerCommand>, IHandleMessages<CheckServerStatusCommand>
+    public class StartServerSaga : Saga<StartServerSagaData>, IAmStartedByMessages<StartServerCommand>, IHandleTimeouts<CheckServerStatusCommand>
     {
         private readonly IInstanceManager _instanceManager;
 
@@ -15,19 +15,16 @@ namespace EC2Utilities.ServiceBus.Sagas
         {
             _instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
         }
-
-        public override void ConfigureHowToFindSaga()
-        {
-            ConfigureMapping<CheckServerStatusCommand>(x => x.InstanceId, y => y.InstanceId);
-        }
         
         public void Handle(StartServerCommand message)
         {
             Data.InstanceId = message.InstanceId;
             Data.NotificationEmailAddress = message.NotificationEmailAddress;
+
+            Timeout(new CheckServerStatusCommand { InstanceId = Data.InstanceId });
         }
 
-        public void Handle(CheckServerStatusCommand message)
+        public void Timeout(CheckServerStatusCommand state)
         {
             switch (Data.ServerStartUpStatus)
             {
@@ -59,9 +56,9 @@ namespace EC2Utilities.ServiceBus.Sagas
                 case ServerStartUpStatus.IpAssigned:
                     {
                         _instanceManager.SendServerAvailableNotification(Data.InstanceId, Data.NotificationEmailAddress);
-                        
+
                         Data.ServerStartUpStatus = ServerStartUpStatus.Complete;
-                        
+
                         break;
                     }
                 case ServerStartUpStatus.Complete:
@@ -73,12 +70,13 @@ namespace EC2Utilities.ServiceBus.Sagas
             }
 
             var reply = new ServerStatusMessage
-                            {
-                                InstanceId = Data.InstanceId,
-                                StartUpStatus = Data.ServerStartUpStatus
-                            };
+            {
+                InstanceId = Data.InstanceId,
+                StartUpStatus = Data.ServerStartUpStatus
+            };
 
             ReplyToOriginator(reply);
+            RequestUtcTimeout(TimeSpan.FromSeconds(5), new CheckServerStatusCommand { InstanceId = Data.InstanceId });
         }
     }
 }
