@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -7,6 +8,7 @@ using EC2Utilities.Common.Factory;
 using NLog;
 using NServiceBus;
 using StructureMap;
+using log4net;
 
 namespace EC2Utilities.Host.WebApp
 {
@@ -16,6 +18,7 @@ namespace EC2Utilities.Host.WebApp
     public class Ec2UtilitiesWebApp : HttpApplication
     {
         public static IBus Bus { get; private set; }
+        private static readonly ILog Logger = log4net.LogManager.GetLogger(typeof(Ec2UtilitiesWebApp));
 
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -30,6 +33,8 @@ namespace EC2Utilities.Host.WebApp
 
         protected void Application_Start()
         {
+            Logger.Info("Application_Start Start.");
+
             ContainerBootstrapper.BootstrapStructureMap();
 
             AreaRegistration.RegisterAllAreas();
@@ -37,6 +42,8 @@ namespace EC2Utilities.Host.WebApp
             RegisterRoutes(RouteTable.Routes);
 
             StartMessageBus();
+
+            Logger.Info("Application_Start End.");
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
@@ -49,9 +56,11 @@ namespace EC2Utilities.Host.WebApp
 
         private void StartMessageBus()
         {
+            SetLoggingLibrary.Log4Net(log4net.Config.XmlConfigurator.Configure);
+            
             Bus = Configure.With()
                 .DefaultBuilder()
-                .Log4Net()
+                //.Log4Net()
                 .XmlSerializer()
                 .MsmqTransport()
                 .UnicastBus()

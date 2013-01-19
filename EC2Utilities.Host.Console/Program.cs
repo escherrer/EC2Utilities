@@ -4,29 +4,30 @@ using CommandLine;
 using EC2Utilities.Common.Factory;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Common.ResourceAccess;
-using NLog;
 using StructureMap;
+using log4net;
+using log4net.Config;
 
 namespace EC2Utilities.Host.Console
 {
     class Program
     {
-        private static Logger _logger;
+        private static ILog _logger = LogManager.GetLogger("Program");
 
         static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
 
-            ContainerBootstrapper.BootstrapStructureMap();
+            XmlConfigurator.Configure();
 
-            _logger = ObjectFactory.GetInstance<Logger>();
+            ContainerBootstrapper.BootstrapStructureMap();
 
             ProcessArgs(args);
         }
 
         private static void ProcessArgs(string[] args)
         {
-            _logger.Info("Processing args: {0}", string.Join(",", args));
+            _logger.InfoFormat("Processing args: {0}", string.Join(",", args));
 
             var options = new ConsoleOptions();
             ICommandLineParser parser = new CommandLineParser();
@@ -88,8 +89,7 @@ namespace EC2Utilities.Host.Console
         {
             try
             {
-                var logger = LogManager.GetLogger("Program");
-                logger.Fatal("Unhandled exception: " + e.ExceptionObject);
+                _logger.Fatal("Unhandled exception: " + e.ExceptionObject);
             }
             catch
             { }

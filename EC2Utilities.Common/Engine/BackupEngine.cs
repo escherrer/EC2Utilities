@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Amazon.EC2.Model;
 using EC2Utilities.Common.ResourceAccess;
-using NLog;
+using log4net;
 
 namespace EC2Utilities.Common.Engine
 {
@@ -11,13 +11,12 @@ namespace EC2Utilities.Common.Engine
     {
         private readonly IConfigResourceAccess _configResourceAccess;
         private readonly IEc2ResourceAccess _ec2ResourceAccess;
-        private readonly Logger _logger;
+        private readonly ILog _logger = LogManager.GetLogger(typeof(BackupEngine));
 
-        public BackupEngine(IConfigResourceAccess configResourceAccess, IEc2ResourceAccess ec2ResourceAccess, Logger logger)
+        public BackupEngine(IConfigResourceAccess configResourceAccess, IEc2ResourceAccess ec2ResourceAccess)
         {
             _configResourceAccess = configResourceAccess;
             _ec2ResourceAccess = ec2ResourceAccess;
-            _logger = logger;
         }
 
         public void BackupInstances()
@@ -42,12 +41,12 @@ namespace EC2Utilities.Common.Engine
                 string volumeName = GetVolumeName(eC2Volume);
                 string instanceName = string.Join(",", instanceNames);
 
-                _logger.Info("Sending back up of volume {0} of instance {1} request.", volumeName, instanceName);
+                _logger.InfoFormat("Sending back up of volume {0} of instance {1} request.", volumeName, instanceName);
 
                 string snapshotDescription = string.Format("{0} {1} Backup", instanceName, volumeName);
                 _ec2ResourceAccess.SnapshotVolume(ec2Key, eC2Volume.VolumeId, snapshotDescription, "Automatic");
 
-                _logger.Info("Back up of volume {0} of instance {1} request sent.", volumeName, instanceName);
+                _logger.InfoFormat("Back up of volume {0} of instance {1} request sent.", volumeName, instanceName);
             }
         }
 
@@ -65,9 +64,9 @@ namespace EC2Utilities.Common.Engine
 
                     if (backupDate.AddDays(backupRetentionDays) < DateTime.Now)
                     {
-                        _logger.Info("Sending request to delete snapshotId {0}.", snapshot.SnapshotId);
+                        _logger.InfoFormat("Sending request to delete snapshotId {0}.", snapshot.SnapshotId);
                         _ec2ResourceAccess.DeleteSnapshot(ec2Key, snapshot.SnapshotId);
-                        _logger.Info("Request to delete snapshotId {0} sent.", snapshot.SnapshotId);
+                        _logger.InfoFormat("Request to delete snapshotId {0} sent.", snapshot.SnapshotId);
                     }
                 }
             }

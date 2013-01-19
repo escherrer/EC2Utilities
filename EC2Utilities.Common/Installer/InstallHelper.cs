@@ -3,19 +3,18 @@ using System.Collections;
 using System.Configuration.Install;
 using System.Linq;
 using System.ServiceProcess;
-using NLog;
+using log4net;
 
 namespace EC2Utilities.Common.Installer
 {
     public class InstallHelper<T> where T : ServiceBase
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof(InstallHelper<T>));
         private readonly string _serviceName;
-        private readonly Logger _logger;
 
-        public InstallHelper(string serviceName, Logger logger)
+        public InstallHelper(string serviceName)
         {
             _serviceName = serviceName;
-            _logger = logger;
         }
 
         private bool IsInstalled()
@@ -65,7 +64,7 @@ namespace EC2Utilities.Common.Installer
                 }
                 catch (Exception e)
                 {
-                    _logger.FatalException("Failed to install service - rolling back.", e);
+                    _logger.Fatal("Failed to install service - rolling back.", e);
                     installer.Rollback(state);
                     _logger.Info("Service install rollback complete.");
                 }

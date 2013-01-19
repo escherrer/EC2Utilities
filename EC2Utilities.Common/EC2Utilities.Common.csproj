@@ -12,6 +12,8 @@
     <AssemblyName>EC2Utilities.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,9 +47,6 @@
     </Reference>
     <Reference Include="Microsoft.Win32.TaskScheduler">
       <HintPath>..\Lib\TaskScheduler\Microsoft.Win32.TaskScheduler.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\packages\NServiceBus.Interfaces.3.3.3\lib\net40\NServiceBus.dll</HintPath>
@@ -96,6 +95,7 @@
     <Compile Include="Engine\IScheduleEngine.cs" />
     <Compile Include="Engine\ScheduleEngine.cs" />
     <Compile Include="Exceptions\ResourceAccessException.cs" />
+    <Compile Include="Logging\Log4NetExtensions.cs" />
     <Compile Include="Factory\ContainerBootstrapper.cs" />
     <Compile Include="Factory\ResourceAccessInterceptor.cs" />
     <Compile Include="Factory\ResourceAccessTypeInterceptor.cs" />
@@ -130,6 +130,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

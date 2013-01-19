@@ -4,22 +4,17 @@ using Amazon.EC2;
 using Amazon.EC2.Model;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
-using NLog;
+using log4net;
 
 namespace EC2Utilities.Common.ResourceAccess
 {
     public class Ec2ResourceAccess : IEc2ResourceAccess
     {
-        private readonly Logger _logger;
-
-        public Ec2ResourceAccess(Logger logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILog _logger = LogManager.GetLogger(typeof(Ec2ResourceAccess));
 
         public DescribeInstancesResult GetInstances(Ec2Key ec2Key)
         {
-            _logger.Trace("GetInstances Start.");
+            _logger.Debug("GetInstances Start.");
 
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
@@ -29,14 +24,14 @@ namespace EC2Utilities.Common.ResourceAccess
 
             DescribeInstancesResult result = describeInstancesResponse.DescribeInstancesResult;
 
-            _logger.Trace("GetInstances End.");
+            _logger.Debug("GetInstances End.");
 
             return result;
         }
 
         public DescribeVolumesResult GetVolumes(Ec2Key ec2Key)
         {
-            _logger.Trace("GetVolumes Start.");
+            _logger.Debug("GetVolumes Start.");
 
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
@@ -46,7 +41,7 @@ namespace EC2Utilities.Common.ResourceAccess
 
             DescribeVolumesResult result = describeVolumesResponse.DescribeVolumesResult;
 
-            _logger.Trace("GetVolumes End.");
+            _logger.Debug("GetVolumes End.");
 
             return result;
         }
@@ -97,7 +92,7 @@ namespace EC2Utilities.Common.ResourceAccess
 
         public void DeleteSnapshot(Ec2Key ec2Key, string snapshotId)
         {
-            _logger.Trace("DeleteSnapshot Start.");
+            _logger.Debug("DeleteSnapshot Start.");
 
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
@@ -105,12 +100,12 @@ namespace EC2Utilities.Common.ResourceAccess
 
             ec2.DeleteSnapshot(request);
 
-            _logger.Trace("DeleteSnapshot End.");
+            _logger.Debug("DeleteSnapshot End.");
         }
 
         public void StartUpInstance(Ec2Key ec2Key, string instanceId)
         {
-            _logger.Trace("DeleteSnapshot Start.");
+            _logger.Debug("DeleteSnapshot Start.");
 
             AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
 
@@ -124,7 +119,7 @@ namespace EC2Utilities.Common.ResourceAccess
 
             ec2.StartInstances(request);
 
-            _logger.Trace("StartUpInstance End.");
+            _logger.Debug("StartUpInstance End.");
         }
 
         public void AssociateIpToInstance(Ec2Key ec2Key, string instanceId, string ip)

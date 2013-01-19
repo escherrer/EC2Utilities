@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using EC2Utilities.Common.Engine;
+﻿using EC2Utilities.Common.Engine;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Common.ResourceAccess;
-using NLog;
 using StructureMap;
+using log4net;
 
 namespace EC2Utilities.Common.Factory
 {
@@ -22,7 +19,7 @@ namespace EC2Utilities.Common.Factory
                 x.For<IScheduleEngine>().Use<ScheduleEngine>();
                 x.For<IScheduleManager>().Use<ScheduleManager>();
                 x.For<IBackupManager>().Use<BackupManager>();
-                x.For<Logger>().Use(y => LogManager.GetLogger(""));
+                x.For<ILog>().Use(y => LogManager.GetLogger("Injected"));
                 x.For<IInstanceManager>().Use<InstanceManager>();
                 x.RegisterInterceptor(new ResourceAccessTypeInterceptor());
             });

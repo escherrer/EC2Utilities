@@ -5,7 +5,7 @@ using Amazon.EC2.Model;
 using EC2Utilities.Common.Contract;
 using EC2Utilities.Common.ResourceAccess;
 using EC2Utilities.Common.Utility;
-using NLog;
+using log4net;
 
 namespace EC2Utilities.Common.Manager
 {
@@ -13,18 +13,17 @@ namespace EC2Utilities.Common.Manager
     {
         private readonly IConfigResourceAccess _configResourceAccess;
         private readonly IEc2ResourceAccess _ec2ResourceAccess;
-        private readonly Logger _logger;
+        private readonly ILog _logger = LogManager.GetLogger(typeof(InstanceManager));
 
-        public InstanceManager(IConfigResourceAccess configResourceAccess, IEc2ResourceAccess ec2ResourceAccess, Logger logger)
+        public InstanceManager(IConfigResourceAccess configResourceAccess, IEc2ResourceAccess ec2ResourceAccess)
         {
             _configResourceAccess = configResourceAccess;
             _ec2ResourceAccess = ec2ResourceAccess;
-            _logger = logger;
         }
 
         public List<Ec2UtilityInstance> GetInstances()
         {
-            _logger.Trace("Get Instances Start.");
+            _logger.Debug("Get Instances Start.");
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
             DescribeInstancesResult ec2Instances = _ec2ResourceAccess.GetInstances(ec2Key);
@@ -45,7 +44,7 @@ namespace EC2Utilities.Common.Manager
                 }
             }
 
-            _logger.Trace("Get Instances End.");
+            _logger.Debug("Get Instances End.");
 
             return returnInstances;
         }
@@ -57,18 +56,18 @@ namespace EC2Utilities.Common.Manager
 
         public void StartUpInstance(string instanceId)
         {
-            _logger.Trace("StartUpInstance Start.");
+            _logger.Debug("StartUpInstance Start.");
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
 
             _ec2ResourceAccess.StartUpInstance(ec2Key, instanceId);
 
-            _logger.Trace("StartUpInstance End.");
+            _logger.Debug("StartUpInstance End.");
         }
 
         public void AssignInstanceIp(string instanceId)
         {
-            _logger.Trace("AssignInstanceIp Start.");
+            _logger.Debug("AssignInstanceIp Start.");
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
 
@@ -79,12 +78,12 @@ namespace EC2Utilities.Common.Manager
                 _ec2ResourceAccess.AssociateIpToInstance(ec2Key, instanceId, instance.DefaultIp);
             }
 
-            _logger.Trace("AssignInstanceIp End.");
+            _logger.Debug("AssignInstanceIp End.");
         }
 
         public void SendServerAvailableNotification(string instanceId, string notificationEmailAddress)
         {
-            _logger.Trace("AssignInstanceIp Start.");
+            _logger.Debug("AssignInstanceIp Start.");
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
             Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
@@ -97,7 +96,7 @@ namespace EC2Utilities.Common.Manager
 
             _ec2ResourceAccess.SendEmail(ec2Key, from, notificationEmailAddresses, subject, body);
 
-            _logger.Trace("AssignInstanceIp End.");
+            _logger.Debug("AssignInstanceIp End.");
         }
     }
 }

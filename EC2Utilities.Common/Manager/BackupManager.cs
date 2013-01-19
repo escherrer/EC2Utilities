@@ -1,25 +1,24 @@
 ﻿using EC2Utilities.Common.Engine;
 using EC2Utilities.Common.ResourceAccess;
-using NLog;
+using log4net;
 
 namespace EC2Utilities.Common.Manager
 {
     public class BackupManager : IBackupManager
     {
-        private readonly Logger _logger;
+        private static readonly ILog Logger = LogManager.GetLogger("BackupManager");
         private readonly IBackupEngine _backupEngine;
         private readonly IConfigResourceAccess _configResourceAccess;
 
-        public BackupManager(Logger logger, IBackupEngine backupEngine, IConfigResourceAccess configResourceAccess)
+        public BackupManager(IBackupEngine backupEngine, IConfigResourceAccess configResourceAccess)
         {
-            _logger = logger;
             _backupEngine = backupEngine;
             _configResourceAccess = configResourceAccess;
         }
 
         public void RunBackups()
         {
-            _logger.Trace("RunBackups Start.");
+            Logger.Debug("RunBackups Start.");
 
             _backupEngine.BackupInstances();
 
@@ -27,7 +26,7 @@ namespace EC2Utilities.Common.Manager
 
             _backupEngine.PurgeBackups(backupRetentionDays);
 
-            _logger.Trace("RunBackups End.");
+            Logger.Debug("RunBackups End.");
         }
     }
 }

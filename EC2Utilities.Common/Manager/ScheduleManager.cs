@@ -1,21 +1,16 @@
 ﻿using EC2Utilities.Common.Engine;
-using NLog;
 using StructureMap;
+using log4net;
 
 namespace EC2Utilities.Common.Manager
 {
     public class ScheduleManager : IScheduleManager
     {
-        private readonly Logger _logger;
-
-        public ScheduleManager(Logger logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILog _logger = LogManager.GetLogger(typeof(ScheduleManager));
 
         public void ScheduleBackupTasks()
         {
-            _logger.Trace("ScheduleBackupTasks Start.");
+            _logger.Debug("ScheduleBackupTasks Start.");
 
             var scheduleEngine = ObjectFactory.GetInstance<IScheduleEngine>();
 
@@ -23,18 +18,18 @@ namespace EC2Utilities.Common.Manager
 
             scheduleEngine.ScheduleBackup();
 
-            _logger.Trace("ScheduleBackupTasks End.");
+            _logger.Debug("ScheduleBackupTasks End.");
         }
 
         public void RemoveScheduledBackupTasks()
         {
-            _logger.Trace("RemoveScheduleBackupTasks Start.");
+            _logger.Debug("RemoveScheduleBackupTasks Start.");
 
             var scheduleEngine = ObjectFactory.GetInstance<IScheduleEngine>();
 
             scheduleEngine.UnScheduleBackup();
 
-            _logger.Trace("RemoveScheduleBackupTasks End.");
+            _logger.Debug("RemoveScheduleBackupTasks End.");
         }
     }
 }
