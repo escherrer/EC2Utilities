@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using EC2Utilities.Common.Factory;
-using NLog;
 using NServiceBus;
 using StructureMap;
 using log4net;
@@ -18,7 +16,7 @@ namespace EC2Utilities.Host.WebApp
     public class Ec2UtilitiesWebApp : HttpApplication
     {
         public static IBus Bus { get; private set; }
-        private static readonly ILog Logger = log4net.LogManager.GetLogger(typeof(Ec2UtilitiesWebApp));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Ec2UtilitiesWebApp));
 
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -60,7 +58,6 @@ namespace EC2Utilities.Host.WebApp
             
             Bus = Configure.With()
                 .DefaultBuilder()
-                //.Log4Net()
                 .XmlSerializer()
                 .MsmqTransport()
                 .UnicastBus()
@@ -73,11 +70,11 @@ namespace EC2Utilities.Host.WebApp
         {
             try
             {
-                var logger = ObjectFactory.GetInstance<Logger>();
+                var logger = ObjectFactory.GetInstance<ILog>();
 
                 Exception exception = Server.GetLastError() ?? new Exception("Unable to get exception.");
 
-                logger.FatalException("An unhandled exception occurred.", exception);
+                logger.Fatal("An unhandled exception occurred.", exception);
             }
             catch
             { }

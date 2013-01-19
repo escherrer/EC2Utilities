@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using NLog;
 using StructureMap;
+using log4net;
 
 namespace EC2Utilities.Host.WebApp.Controllers
 {
@@ -11,10 +11,10 @@ namespace EC2Utilities.Host.WebApp.Controllers
         {
             try
             {
-                var logger = ObjectFactory.GetInstance<Logger>();
+                var logger = ObjectFactory.GetInstance<ILog>();
                 Exception exception = Server.GetLastError();
 
-                logger.FatalException("An unhandled exception occurred.", exception);
+                logger.Fatal("An unhandled exception occurred.", exception);
             }
             catch
             { }
