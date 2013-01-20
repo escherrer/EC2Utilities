@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
-using EC2Utilities.Common.DebugHelper;
 using EC2Utilities.Host.WebApp.Models;
 
 namespace EC2Utilities.Host.WebApp.Controllers
@@ -16,7 +10,6 @@ namespace EC2Utilities.Host.WebApp.Controllers
     [HandleError]
     public class AccountController : Controller
     {
-
         public IFormsAuthenticationService FormsService { get; set; }
         public IMembershipService MembershipService { get; set; }
 

@@ -9,7 +9,7 @@ namespace EC2Utilities.Common.DebugHelper
         private const string CredFileName = @"EC2Utility.Debug";
         private const string CredFileDirectory = @"C:\EC2Utility\";
 
-        public static DebugCredentials GetDebugCredentials()
+        public static DebugCredentials GetCredentials()
         {
             if (!File.Exists(CredFileDirectory + CredFileName))
             {

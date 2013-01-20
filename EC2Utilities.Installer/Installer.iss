@@ -47,7 +47,7 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 
 [Run]
 Filename: "{app}\Console\{#MyAppExeName}"; Parameters: "-s"; Description: "{cm:LaunchProgram,{#StringChange(ConsoleBackupName, '&', '&&')}}";
-Filename: "{app}\ServiceBus\{#NServiceBusHost}"; Parameters: "/install /serviceName:EC2UtilitiesServiceBus /displayName:EC2_Utilities_Service_Bus /description:EC2_Utilities_Service_Bus NServiceBus.Integration"; Description: "{cm:LaunchProgram,{#StringChange(InstallServiceBus, '&', '&&')}}";
+Filename: "{app}\ServiceBus\{#NServiceBusHost}"; Parameters: "/install /serviceName:EC2UtilitiesServiceBus /displayName:EC2_Utilities_Service_Bus /description:EC2_Utilities_Service_Bus /endpointName:EC2Utilities.ServiceBus NServiceBus.Integration"; Description: "{cm:LaunchProgram,{#StringChange(InstallServiceBus, '&', '&&')}}";
 Filename: "net.exe"; Parameters: "start EC2_Utilities_Service_Bus"; Description: "Starting service bus"; 
 
 [UninstallRun]

@@ -21,14 +21,9 @@ namespace EC2Utilities.Common.ResourceAccess
         {
             var result = new Ec2Key();
             
-            result.AwsAccessKey = ConfigurationManager.AppSettings["AWSAccessKey"];
-            result.AwsSecretKey = ConfigurationManager.AppSettings["AWSSecretKey"];
-
-#if DEBUG
-            var debugCreds = CredentialHelper.GetDebugCredentials();
+            var debugCreds = CredentialHelper.GetCredentials();
             result.AwsAccessKey = debugCreds.AccessKeyId;
             result.AwsSecretKey = debugCreds.SecretKey;
-#endif
 
             return result;
         }
