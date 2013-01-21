@@ -4,6 +4,7 @@ using Amazon.EC2;
 using Amazon.EC2.Model;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
+using Castle.Components.DictionaryAdapter;
 using log4net;
 
 namespace EC2Utilities.Common.ResourceAccess
@@ -153,6 +154,42 @@ namespace EC2Utilities.Common.ResourceAccess
                               };
 
             ses.SendEmail(request);
+        }
+
+        public List<string> GetImageSizes(Ec2Key ec2Key, string imageId)
+        {
+            //AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
+
+            //var request = new DescribeImagesRequest {ImageId = new List<string> {imageId}};
+
+            //DescribeImagesResponse describeImagesResponse = ec2.DescribeImages(request);
+
+            //
+            // According to my research there is currently no way to get the available sizes for a given instance. (boooo!)
+            //
+
+            var instanceTypes = new List<string>
+                                    {
+                                        "t1.micro",
+                                        "m1.small",
+                                        "m1.medium",
+                                        "m1.large",
+                                        "m1.xlarge",
+                                        "m3.xlarge",
+                                        "m3.2xlarge",
+                                        "m2.xlarge",
+                                        "m2.2xlarge",
+                                        "m2.4xlarge",
+                                        "c1.medium",
+                                        "c1.xlarge",
+                                        "cc1.4xlarge",
+                                        "cc2.8xlarge",
+                                        "cg1.4xlarge",
+                                        "hi1.4xlarge",
+                                        "hs1.8xlarge"
+                                    };
+
+            return instanceTypes;
         }
 
         private AmazonEC2 CreateAmazonEc2Client(Ec2Key ec2Key)

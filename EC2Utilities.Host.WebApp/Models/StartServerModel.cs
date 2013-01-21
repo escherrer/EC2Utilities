@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using EC2Utilities.Common.Contract;
 
 namespace EC2Utilities.Host.WebApp.Models
@@ -13,6 +15,7 @@ namespace EC2Utilities.Host.WebApp.Models
             ServerId = ec2UtilityInstance.InstanceId;
             ServerName = ec2UtilityInstance.InstanceName;
             ServerStatus = ec2UtilityInstance.Status.ToString();
+            AvailableServerTypes = new List<string>();
         }
 
         public string ServerName { get; set; }
@@ -20,6 +23,10 @@ namespace EC2Utilities.Host.WebApp.Models
         public string ServerId { get; set; }
 
         public string ServerStatus { get; set; }
+
+        public string ServerType { get; set; }
+
+        public List<string> AvailableServerTypes { get; set; }
 
         [RegularExpression(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Please enter a valid e-mail adress")]
         [Required]

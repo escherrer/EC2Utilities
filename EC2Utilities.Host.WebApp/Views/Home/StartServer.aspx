@@ -23,6 +23,9 @@
         <div class="display-label" style="font-size: medium"><strong>Server Id</strong></div>
         <div class="display-field"><%: Html.DisplayFor(x => x.ServerId) %></div>
         
+        <div class="editor-label" style="font-size: medium"><strong>Server Type</strong></div>
+        <div class="display-field"><%: Html.DropDownListFor(m => m.ServerType, new SelectList(Model.AvailableServerTypes))%></div>
+
         <div class="editor-label" style="font-size: medium"><strong>Notification Email Address</strong></div>
         <div class="editor-field">
         <%: Html.TextBoxFor(m => m.EmailAddress) %>

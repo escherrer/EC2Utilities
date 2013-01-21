@@ -7,12 +7,14 @@ namespace EC2Utilities.Common.Manager
     {
         List<Ec2UtilityInstance> GetInstances();
 
-        Ec2UtilityInstance GetInstance(string instanceid);
+        Ec2UtilityInstance GetInstance(string instanceId);
 
         void StartUpInstance(string instanceId);
 
         void AssignInstanceIp(string instanceId);
 
         void SendServerAvailableNotification(string instanceId, string notificationEmailAddress);
+
+        List<string> GetAvailableInstanceSizes(string instanceId);
     }
 }

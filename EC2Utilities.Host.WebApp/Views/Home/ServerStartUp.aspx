@@ -18,6 +18,9 @@
                 Server Id
             </th>
             <th>
+                Server Size
+            </th>
+            <th>
                 Server Status
             </th>
             <th>
@@ -33,6 +36,9 @@
             </td>
             <td>
                 <%: item.ServerId %>
+            </td>
+            <td>
+                <%: item.ServerType %>
             </td>
             <td>
                 <%: item.ServerStatus %>

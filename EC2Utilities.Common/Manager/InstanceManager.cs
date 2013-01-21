@@ -39,6 +39,8 @@ namespace EC2Utilities.Common.Manager
                     returnInstance.InstanceName = runningInstance.Tag.GetTagValueByKey("Name");
                     returnInstance.Status = (Ec2UtilityInstanceStatus)Enum.Parse(typeof(Ec2UtilityInstanceStatus), runningInstance.InstanceState.Name, true);
                     returnInstance.DefaultIp = runningInstance.Tag.GetTagValueByKey("DefaultIp");
+                    returnInstance.InstanceType = runningInstance.InstanceType;
+                    returnInstance.ImageId = runningInstance.ImageId;
 
                     returnInstances.Add(returnInstance);   
                 }
@@ -49,9 +51,9 @@ namespace EC2Utilities.Common.Manager
             return returnInstances;
         }
 
-        public Ec2UtilityInstance GetInstance(string instanceid)
+        public Ec2UtilityInstance GetInstance(string instanceId)
         {
-            return GetInstances().SingleOrDefault(x => x.InstanceId == instanceid);
+            return GetInstances().SingleOrDefault(x => x.InstanceId == instanceId);
         }
 
         public void StartUpInstance(string instanceId)
@@ -97,6 +99,17 @@ namespace EC2Utilities.Common.Manager
             _ec2ResourceAccess.SendEmail(ec2Key, from, notificationEmailAddresses, subject, body);
 
             _logger.Debug("AssignInstanceIp End.");
+        }
+
+        public List<string> GetAvailableInstanceSizes(string instanceId)
+        {
+            Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
+
+            Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
+
+            List<string> sizes = _ec2ResourceAccess.GetImageSizes(ec2Key, instance.ImageId);
+
+            return sizes;
         }
     }
 }

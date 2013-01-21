@@ -11,6 +11,7 @@ namespace EC2Utilities.Host.WebApp.Models
         {
             ServerId = ec2UtilityInstance.InstanceId;
             ServerName = ec2UtilityInstance.InstanceName;
+            ServerType = ec2UtilityInstance.InstanceType;
             ServerStatus = ec2UtilityInstance.Status.ToString();
         }
 
@@ -19,5 +20,7 @@ namespace EC2Utilities.Host.WebApp.Models
         public string ServerId { get; set; }
 
         public string ServerStatus { get; set; }
+
+        public string ServerType { get; set; }
     }
 }

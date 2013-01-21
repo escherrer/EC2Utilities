@@ -70,11 +70,14 @@ namespace EC2Utilities.Host.WebApp.Controllers
         public ActionResult StartServer(string instanceId)
         {
             var instanceManager = ObjectFactory.GetInstance<IInstanceManager>();
+            
             Ec2UtilityInstance ec2UtilityInstance;
+            var instanceSizes = new List<string>();
 
             try
             {
                 ec2UtilityInstance = instanceManager.GetInstance(instanceId);
+                instanceSizes = instanceManager.GetAvailableInstanceSizes(instanceId);
             }
             catch (ResourceAccessException)
             {
@@ -83,7 +86,7 @@ namespace EC2Utilities.Host.WebApp.Controllers
                 ec2UtilityInstance = new Ec2UtilityInstance {Status = Ec2UtilityInstanceStatus.Indeterminate};
             }
 
-            var startServerModel = new StartServerModel(ec2UtilityInstance);
+            var startServerModel = new StartServerModel(ec2UtilityInstance) {AvailableServerTypes = instanceSizes};
 
             return View(startServerModel);
         }
@@ -96,7 +99,8 @@ namespace EC2Utilities.Host.WebApp.Controllers
                 var command = new StartServerCommand
                 {
                     InstanceId = model.ServerId,
-                    NotificationEmailAddress = model.EmailAddress
+                    NotificationEmailAddress = model.EmailAddress,
+                    InstanceType = model.ServerType
                 };
 
                 Ec2UtilitiesWebApp.Bus.Send(command);

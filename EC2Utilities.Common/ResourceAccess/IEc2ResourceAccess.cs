@@ -20,5 +20,7 @@ namespace EC2Utilities.Common.ResourceAccess
         void AssociateIpToInstance(Ec2Key ec2Key, string instanceId, string ip);
 
         void SendEmail(Ec2Key ec2Key, string fromAddress, List<string> toAddresses, string subject, string body);
+
+        List<string> GetImageSizes(Ec2Key ec2Key, string foo);
     }
 }
