@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using EC2Utilities.Common.Contract;
 
@@ -15,6 +14,7 @@ namespace EC2Utilities.Host.WebApp.Models
             ServerId = ec2UtilityInstance.InstanceId;
             ServerName = ec2UtilityInstance.InstanceName;
             ServerStatus = ec2UtilityInstance.Status.ToString();
+            ServerType = ec2UtilityInstance.InstanceType;
             AvailableServerTypes = new List<string>();
         }
 

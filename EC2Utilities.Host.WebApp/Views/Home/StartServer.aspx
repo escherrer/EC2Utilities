@@ -23,7 +23,10 @@
         <div class="display-label" style="font-size: medium"><strong>Server Id</strong></div>
         <div class="display-field"><%: Html.DisplayFor(x => x.ServerId) %></div>
         
-        <div class="editor-label" style="font-size: medium"><strong>Server Type</strong></div>
+        <div class="display-label" style="font-size: medium"><strong>Current Server Type</strong></div>
+        <div class="display-field"><%: Html.DisplayFor(x => x.ServerType) %></div>
+
+        <div class="editor-label" style="font-size: medium"><strong>New Server Type</strong></div>
         <div class="display-field"><%: Html.DropDownListFor(m => m.ServerType, new SelectList(Model.AvailableServerTypes))%></div>
 
         <div class="editor-label" style="font-size: medium"><strong>Notification Email Address</strong></div>
@@ -33,6 +36,8 @@
         </div>
         
         <div><%: Html.HiddenFor(x => x.ServerId)%></div>
+        <div><%: Html.HiddenFor(x => x.ServerType)%></div>
+        <div><%: Html.HiddenFor(x => x.ServerName)%></div>
 
         <p>
             <input type="submit" value="Start Server" />

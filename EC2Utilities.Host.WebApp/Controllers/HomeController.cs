@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using EC2Utilities.Common.Contract;
 using EC2Utilities.Common.Contract.Messages;
 using EC2Utilities.Common.Exceptions;
 using EC2Utilities.Common.Manager;
 using EC2Utilities.Host.WebApp.Models;
-using NServiceBus;
 using StructureMap;
 
 namespace EC2Utilities.Host.WebApp.Controllers
@@ -54,6 +51,7 @@ namespace EC2Utilities.Host.WebApp.Controllers
                 switch (startUpStatus)
                 {
                     case ServerStartUpStatus.Initialized:
+                    case ServerStartUpStatus.ReSizing:
                     case ServerStartUpStatus.Starting:
                     case ServerStartUpStatus.Started:
                     case ServerStartUpStatus.IpAssigned:
@@ -99,8 +97,8 @@ namespace EC2Utilities.Host.WebApp.Controllers
                 var command = new StartServerCommand
                 {
                     InstanceId = model.ServerId,
-                    NotificationEmailAddress = model.EmailAddress,
-                    InstanceType = model.ServerType
+                    RequestedInstanceType = model.ServerType,
+                    NotificationEmailAddress = model.EmailAddress
                 };
 
                 Ec2UtilitiesWebApp.Bus.Send(command);

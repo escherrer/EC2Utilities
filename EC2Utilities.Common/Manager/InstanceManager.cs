@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Amazon.EC2.Model;
 using EC2Utilities.Common.Contract;
 using EC2Utilities.Common.ResourceAccess;
@@ -73,7 +74,7 @@ namespace EC2Utilities.Common.Manager
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
 
-            Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
+            Ec2UtilityInstance instance = GetInstance(instanceId);
 
             if (!string.IsNullOrWhiteSpace(instance.DefaultIp))
             {
@@ -83,15 +84,12 @@ namespace EC2Utilities.Common.Manager
             _logger.Debug("AssignInstanceIp End.");
         }
 
-        public void SendServerAvailableNotification(string instanceId, string notificationEmailAddress)
+        public void SendStartUpEmail(string instanceId, string notificationEmailAddress, string subject, string body)
         {
             _logger.Debug("AssignInstanceIp Start.");
 
             Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
-            Ec2UtilityInstance instance = GetInstances().Single(x => x.InstanceId == instanceId);
 
-            string subject = string.Format("Instance '{0}' Started", instance.InstanceName);
-            string body = string.Format("Instance '{0}' has been started and assigned to IP {1}.", instance.InstanceName, instance.DefaultIp);
             string from = _configResourceAccess.GetEmailAlertFromEmailAddress();
             List<string> notificationEmailAddresses = _configResourceAccess.GetNotificationEmailaddresses();
             notificationEmailAddresses.Add(notificationEmailAddress);
@@ -110,6 +108,17 @@ namespace EC2Utilities.Common.Manager
             List<string> sizes = _ec2ResourceAccess.GetImageSizes(ec2Key, instance.ImageId);
 
             return sizes;
+        }
+
+        public void ChangeInstanceType(string instanceId, string instanceType)
+        {
+            _logger.Debug("ChangeInstanceType Start.");
+
+            Ec2Key ec2Key = _configResourceAccess.GetEc2Key();
+            
+            _ec2ResourceAccess.ModifyInstanceType(ec2Key, instanceId, instanceType);
+
+            _logger.Debug("ChangeInstanceType End.");
         }
     }
 }

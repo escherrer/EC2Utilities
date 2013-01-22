@@ -4,7 +4,6 @@ using Amazon.EC2;
 using Amazon.EC2.Model;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
-using Castle.Components.DictionaryAdapter;
 using log4net;
 
 namespace EC2Utilities.Common.ResourceAccess
@@ -190,6 +189,20 @@ namespace EC2Utilities.Common.ResourceAccess
                                     };
 
             return instanceTypes;
+        }
+
+        public void ModifyInstanceType(Ec2Key ec2Key, string instanceId, string instanceType)
+        {
+            AmazonEC2 ec2 = CreateAmazonEc2Client(ec2Key);
+
+            var request = new ModifyInstanceAttributeRequest
+            {
+                Attribute = "instanceType",
+                InstanceId = instanceId,
+                Value = instanceType
+            };
+
+            ec2.ModifyInstanceAttribute(request);
         }
 
         private AmazonEC2 CreateAmazonEc2Client(Ec2Key ec2Key)

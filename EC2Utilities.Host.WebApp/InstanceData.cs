@@ -7,7 +7,7 @@ namespace EC2Utilities.Host.WebApp
     public static class InstanceData
     {
         private static readonly Dictionary<string, ServerStartUpStatus> InstanceStatuses;
-        private static readonly Object ThisLock = new Object();
+        private static readonly Object This = new Object();
 
         static InstanceData()
         {
@@ -26,7 +26,7 @@ namespace EC2Utilities.Host.WebApp
 
         public static ServerStartUpStatus GetServerStartUpStatus(string instanceId)
         {
-            lock (ThisLock)
+            lock (This)
             {
                 if (InstanceStatuses.ContainsKey(instanceId))
                 {

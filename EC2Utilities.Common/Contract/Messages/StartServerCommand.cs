@@ -8,6 +8,6 @@ namespace EC2Utilities.Common.Contract.Messages
 
         public string NotificationEmailAddress { get; set; }
 
-        public string InstanceType { get; set; }
+        public string RequestedInstanceType { get; set; }
     }
 }

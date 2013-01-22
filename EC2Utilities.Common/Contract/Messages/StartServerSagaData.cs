@@ -8,8 +8,12 @@ namespace EC2Utilities.Common.Contract.Messages
         public Guid Id { get; set; }
         public string Originator { get; set; }
         public string OriginalMessageId { get; set; }
-        public string InstanceId { get; set; }
+        
         public ServerStartUpStatus ServerStartUpStatus { get; set; }
         public string NotificationEmailAddress { get; set; }
+        public string Notes { get; set; }
+
+        public Ec2UtilityInstance Instance { get; set; }
+        public string RequestedInstanceType { get; set; }
     }
 }

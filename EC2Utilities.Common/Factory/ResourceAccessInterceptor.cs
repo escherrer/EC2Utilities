@@ -1,4 +1,5 @@
 ﻿using System;
+using Amazon.EC2;
 using Castle.DynamicProxy;
 using EC2Utilities.Common.Exceptions;
 using log4net;
@@ -14,6 +15,15 @@ namespace EC2Utilities.Common.Factory
             try
             {
                 invocation.Proceed();
+            }
+            catch (AmazonEC2Exception e)
+            {
+                if (e.ErrorCode == "InvalidInstanceAttributeValue")
+                {
+                    throw new InvalidInstanceTypeException(e.Message); 
+                }
+
+                throw new ResourceAccessException(e);
             }
             catch (Exception e)
             {

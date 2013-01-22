@@ -3,6 +3,7 @@
     public enum ServerStartUpStatus
     {
         Initialized,
+        ReSizing,
         Starting,
         Started,
         IpAssigned,

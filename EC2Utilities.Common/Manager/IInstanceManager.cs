@@ -13,8 +13,10 @@ namespace EC2Utilities.Common.Manager
 
         void AssignInstanceIp(string instanceId);
 
-        void SendServerAvailableNotification(string instanceId, string notificationEmailAddress);
+        void SendStartUpEmail(string instanceId, string notificationEmailAddress, string subject, string body);
 
         List<string> GetAvailableInstanceSizes(string instanceId);
+
+        void ChangeInstanceType(string instanceId, string instanceType);
     }
 }
